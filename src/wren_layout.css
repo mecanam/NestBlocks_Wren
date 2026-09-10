@@ -1,0 +1,146 @@
+/* wren_layout.css — Wren 向けレイアウト
+   ワークスペースとコードタブのみに絞った最小構成 */
+
+/* ── ホーム・グラフタブを完全に非表示 ───────────────────── */
+.nav-item[data-tab="home"],
+.nav-item[data-tab="chart"],
+#home,
+#chart {
+  display: none !important;
+}
+
+/* ── workspaceEmpty は常に非表示 (常時 Blockly を表示) ─── */
+#workspaceEmpty {
+  display: none !important;
+}
+
+/* ── ツールバー: 印刷ボタン・プロジェクト名を非表示 ─────── */
+button[onclick="showPrintModal()"],
+.project-name {
+  display: none !important;
+}
+
+/* ── ヘッダーのヘルプ・ダークモードボタンを非表示 ──────── */
+.icon-btn {
+  display: none !important;
+}
+
+/* ── WebSerial 接続モーダルを非表示 ─────────────────────── */
+.cm-overlay {
+  display: none !important;
+}
+
+/* ── 設定: 外観セクション (テーマ切替) を非表示 ────────── */
+.sg:has(.theme-row) {
+  display: none !important;
+}
+
+/* ── 設定: ボーレート行を非表示 ────────────────────────── */
+.sg-item:has(#baudRate) {
+  display: none !important;
+}
+
+/* ── ヘッダーロゴ: Wren バージョン ──────────────────────────── */
+/* 旧バッジを完全に除去 */
+.logo-text::after { display: none !important; }
+
+/* ロゴアイコン幅を Wren マーク (66:54) に合わせる */
+.logo-icon       { width: 29px !important; }
+.logo-icon svg   { width: 29px !important; }
+
+/* logo-text を flex にして縦棒・エディション名を並べる */
+.logo-text { display: inline-flex; align-items: center; }
+.logo-text em { font-style: normal; color: var(--orange); }
+
+/* 縦棒 (オレンジ) */
+.logo-wren-bar {
+  display: inline-block;
+  width: .1em; height: .72em; border-radius: .05em;
+  background: var(--orange);
+  margin: 0 .28em;
+}
+
+/* "Wren" テキスト (.logo-text span のオレンジを詳細度で上書き) */
+.logo-text .logo-wren-ed { font-weight: 700; letter-spacing: -.03em; color: var(--text); }
+
+/* ── ローディング画面: Wren マーク ──────────────────────────── */
+/* SVG が 66:54 なのでコンテナを幅広に */
+.ld-logo     { width: 88px !important; height: 72px !important; }
+.ld-logo-svg { width: 88px !important; height: 72px !important; }
+
+/* パーツ別アニメーション: 胴体は上から、尾・矢印は下から */
+.ld-wren-body-v,
+.ld-wren-body-h { animation: ldSnapTop .45s cubic-bezier(.16,1,.3,1) .1s both; }
+.ld-wren-tail   { animation: ldSnapBot .45s cubic-bezier(.16,1,.3,1) .2s both; }
+.ld-wren-arrow,
+.ld-wren-eye    { animation: ldSnapBot .3s  cubic-bezier(.16,1,.3,1) .4s both; }
+
+/* ブランド名内の縦棒 */
+.ld-wren-bar {
+  display: inline-block;
+  width: .1em; height: .72em; border-radius: .05em;
+  background: var(--orange);
+  margin: 0 .28em;
+  vertical-align: middle;
+}
+
+/* ブランド名内の "Wren" */
+.ld-wren-ed { font-weight: 700; letter-spacing: -.03em; }
+
+/* ── 接続ボタンのラベル幅を固定 ─────────────────────────── */
+#connectLabel {
+  min-width: 7.5em;
+  text-align: center;
+  font-size: 0.85em;
+}
+
+/* ── コンソール出力フォントサイズ ───────────────────────── */
+#consoleOutput {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* プロジェクトのダウンロード名入力 */
+body {
+  height: 100vh;
+  height: 100dvh;
+}
+body.wren-download-open {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.wren-download-dialog .dialog-input {
+  font-size: 16px;
+}
+dialog.wren-download-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  box-sizing: border-box;
+  color: var(--text);
+}
+dialog.wren-download-dialog::backdrop {
+  background: rgba(0, 0, 0, .55);
+}
+.wren-download-dialog .dialog-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* ── iPad タッチ対応 ─────────────────────────────────────── */
+@media (pointer: coarse) {
+  .nav-item {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
+  .connect-btn,
+  .upload-btn {
+    padding: 8px 16px;
+  }
+}

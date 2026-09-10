@@ -1,0 +1,66 @@
+Copyright (c) 2026 [著作権者名 / Copyright Holder Name]
+All Rights Reserved.
+
+─────────────────────────────────────────────────────────────
+NestBlocks Wren — Proprietary Software License
+─────────────────────────────────────────────────────────────
+
+本ソフトウェア（NestBlocks Wren）の著作権は著作権者に帰属します。
+以下に定める条件を超える利用は、著作権者の書面による事前の許可がない限り
+一切禁止します。
+
+【許可される行為】
+・本リポジトリの内容を個人的な学習・参照目的で閲覧すること
+
+【禁止される行為】
+・ソースコードまたはバイナリの複製・保存（バックアップ目的を含む）
+・コードの改変・翻案・翻訳
+・再配布（公開・非公開・有償・無償・部分的なものを問わず）
+・派生物・類似物の作成
+・商業目的・教育機関・研究機関での使用・提供
+・本システムを模倣したソフトウェアの開発
+
+利用許諾が必要な場合はリポジトリの Issue またはメールにてお問い合わせください。
+
+─────────────────────────────────────────────────────────────
+NestBlocks Wren — Proprietary Software License (English)
+─────────────────────────────────────────────────────────────
+
+The copyright of this software (NestBlocks Wren) belongs to the copyright
+holder listed above. Any use beyond the conditions set forth below is strictly
+prohibited without prior written permission from the copyright holder.
+
+PERMITTED:
+- Viewing the contents of this repository for personal learning and reference
+
+PROHIBITED (without prior written permission):
+- Copying or storing source code or binaries (including for backup purposes)
+- Modifying, adapting, or translating the code
+- Redistribution in any form (public or private, paid or free, partial or whole)
+- Creating derivative works or similar systems
+- Using or providing this system for commercial, educational, or research purposes
+- Developing software that imitates or is based on this system
+
+For licensing inquiries, please open an Issue on this repository or contact
+the copyright holder by email.
+
+─────────────────────────────────────────────────────────────
+Third-Party Notices
+─────────────────────────────────────────────────────────────
+
+This software includes code from the following third-party projects.
+Their respective licenses are reproduced below.
+
+1. NestBlocks (https://github.com/[NestBlocks-repo])
+   Copyright (c) NestBlocks Contributors
+   Licensed under the Apache License, Version 2.0
+   http://www.apache.org/licenses/LICENSE-2.0
+
+2. Blockly (https://github.com/google/blockly)
+   Copyright (c) Google LLC
+   Licensed under the Apache License, Version 2.0
+   http://www.apache.org/licenses/LICENSE-2.0
+
+The above third-party components are distributed in accordance with their
+respective licenses. The proprietary restrictions above apply only to the
+original portions of NestBlocks Wren (firmware/, src/, landing/, build/).

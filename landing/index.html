@@ -1,0 +1,1555 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NestBlocks Wren — A world within.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;900&family=Sora:wght@300;400;600;700;800&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #EDE8E2;
+      --orange:   #C8471A;
+      --text:     #1C1A18;
+      --muted:    #7A7068;
+      --card-bg:  #E4DFDA;
+      --border:   #D4CEC8;
+      --dark-bg:  #595D4A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Sora', 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 64px;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(237,232,226,.93);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid transparent;
+    }
+    /* ── Logo (nbw system) ─────────────────────────────────── */
+    .nbw { display:inline-flex; align-items:center; text-decoration:none; color:var(--text); }
+    .nbw-mark { flex:none; }
+    .nbw-type { font-family:'Outfit',sans-serif; font-weight:900;
+                line-height:1; letter-spacing:-.05em; color:var(--text);
+                display:inline-flex; align-items:center; }
+    .nbw-type i { font-style:normal; color:var(--orange); }
+    .nbw-bar { background:var(--orange); flex:none; border-radius:.05em; }
+    .nbw-ed { font-weight:700; letter-spacing:-.03em; }
+    .nbw.s-nav { gap:9px; }
+    .nbw.s-nav .nbw-mark { width:26px; height:21px; }
+    .nbw.s-nav .nbw-type { font-size:15px; }
+    .nbw.s-nav .nbw-bar  { width:.11em; height:.74em; margin:0 .3em; }
+    .nbw.s-foot { gap:7px; }
+    .nbw.s-foot .nbw-mark { width:20px; height:16px; }
+    .nbw.s-foot .nbw-type { font-size:12px; }
+    .nbw.s-foot .nbw-bar  { width:.11em; height:.74em; margin:0 .28em; }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+      text-decoration: none; color: var(--text); opacity: .6;
+      transition: opacity .2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      background: var(--orange); color: #fff;
+      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: 10px 22px; border-radius: 6px; text-decoration: none;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 46fr 54fr;
+      height: calc(100vh - 68px);
+      max-height: 880px;
+      min-height: 600px;
+      padding: 0 0 0 64px;
+      align-items: stretch;
+      gap: 0;
+      overflow: hidden;
+    }
+    .hero-content {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 60px 60px 60px 0;
+    }
+
+    .hero-headline {
+      font-size: clamp(58px, 7.5vw, 100px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -.035em;
+      margin-bottom: 24px;
+    }
+    .hero-headline .accent { color: var(--orange); }
+
+    .hero-sub {
+      font-size: 17px; font-weight: 700;
+      letter-spacing: .02em; margin-bottom: 10px;
+    }
+    .hero-desc {
+      font-size: 14px; line-height: 1.85; color: var(--muted);
+      max-width: 340px; margin-bottom: 44px;
+    }
+    .hero-btns { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--orange); color: #fff;
+      font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px 28px; border-radius: 8px; text-decoration: none;
+      transition: opacity .2s;
+    }
+    .btn-primary:hover { opacity: .85; }
+    .btn-primary svg { width: 15px; height: 15px; }
+
+    .btn-ghost {
+      font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+      border-bottom: 1.5px solid var(--text);
+      padding-bottom: 2px;
+      transition: opacity .2s;
+    }
+    .btn-ghost:hover { opacity: .5; }
+
+    /* ── HERO VISUAL ──────────────────────────────────────── */
+    .hero-visual {
+      position: relative;
+      align-self: stretch;
+      background-image: url('bird_image.png');
+      background-size: auto 100%;
+      background-repeat: no-repeat;
+      background-position: top center;
+    }
+    .hero-vert {
+      position: absolute; right: -8px; top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      font-size: 9px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--muted); white-space: nowrap; opacity: .7;
+    }
+    .hero-no {
+      position: absolute; bottom: 40px; right: -8px; text-align: right;
+    }
+    .hero-no-n { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--muted); }
+    .hero-no-l { font-size: 9px; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); opacity: .6; }
+
+    /* ── FEATURES ─────────────────────────────────────────── */
+    .features {
+      padding: 96px 64px;
+      text-align: center;
+    }
+    .sec-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 18px;
+    }
+    .sec-title {
+      font-size: clamp(22px, 3.2vw, 38px); font-weight: 700;
+      letter-spacing: -.02em; line-height: 1.35;
+      margin-bottom: 18px;
+    }
+    .sec-rule {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; margin-bottom: 64px;
+    }
+    .sec-rule::before, .sec-rule::after {
+      content: ''; display: block;
+      width: 56px; height: 1px; background: var(--border);
+    }
+    .sec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+    .feat-icon {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: var(--card-bg);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+    }
+    .feat-icon svg {
+      width: 30px; height: 30px;
+      stroke: var(--orange); fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .feat-name { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .feat-desc { font-size: 12.5px; line-height: 1.75; color: var(--muted); }
+
+    /* ── HOW TO USE ───────────────────────────────────────── */
+    .howto {
+      padding: 96px 64px;
+      background: var(--card-bg);
+    }
+    .howto-grid {
+      display: grid;
+      grid-template-columns: 1fr 32px 1fr 32px 1fr;
+      align-items: start;
+      gap: 0;
+      margin-top: 56px;
+    }
+    .howto-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .howto-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: .14em;
+      color: var(--orange); margin-bottom: 16px;
+    }
+    .howto-icon-wrap {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .howto-icon-wrap svg {
+      width: 32px; height: 32px;
+      stroke: var(--orange); fill: none;
+      stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .howto-step-title {
+      font-size: 15px; font-weight: 700; letter-spacing: -.01em;
+      margin-bottom: 10px;
+    }
+    .howto-step-desc {
+      font-size: 14px; line-height: 1.9; color: var(--text);
+      max-width: 300px;
+      overflow-wrap: anywhere;
+    }
+    .howto-arrow {
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 36px;
+      color: var(--border);
+    }
+    .howto-arrow svg {
+      width: 20px; height: 20px;
+      stroke: var(--orange); opacity: .35; fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    @media (max-width: 960px) {
+      .howto { padding: 64px 32px; }
+      .howto-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 0;
+      }
+      .howto-arrow { padding-top: 0; padding-bottom: 0; transform: rotate(90deg); margin: 8px auto; }
+    }
+
+    #setup, #howto { scroll-margin-top: 90px; }
+    .guide-intro { max-width: 680px; margin: 20px auto 0; text-align: center; }
+    .guide-intro a, .guide-note a, .guide-help a, .step-desc a { color: var(--orange); text-underline-offset: 3px; }
+    .guide-note, .guide-access, .guide-help {
+      max-width: 1000px;
+      margin: 28px auto 0;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      background: var(--bg);
+      font-size: 14px;
+      line-height: 1.9;
+      overflow-wrap: anywhere;
+    }
+    .guide-note h3, .guide-access h3 { font-size: 19px; margin-bottom: 12px; }
+    .guide-note p + p, .guide-help p { margin-top: 12px; }
+    .guide-access { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; align-items: center; margin-top: 48px; }
+    .guide-qr { text-align: center; }
+    .guide-qr img { display: block; width: 220px; max-width: 100%; height: auto; margin: auto; }
+    .guide-qr figcaption { margin-top: 10px; font-size: 12px; }
+    .guide-url { display: inline-block; color: var(--orange); font-size: clamp(18px, 3vw, 25px); font-weight: 700; margin: 16px 0; text-underline-offset: 5px; }
+    .guide-help summary { cursor: pointer; font-weight: 700; }
+    .guide-help ol { padding-left: 24px; margin-top: 16px; }
+    .guide-help li + li { margin-top: 12px; }
+    @media (max-width: 640px) {
+      .guide-access { grid-template-columns: 1fr; gap: 24px; }
+      .guide-note, .guide-access, .guide-help { padding: 20px; }
+    }
+
+    /* ── CTA ──────────────────────────────────────────────── */
+    .cta-wrap { padding: 0 64px 96px; }
+    .cta {
+      background: var(--dark-bg);
+      border-radius: 20px;
+      padding: 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .cta-tag {
+      font-size: 9px; font-weight: 700; letter-spacing: .28em; text-transform: uppercase;
+      color: rgba(255,255,255,.45); margin-bottom: 14px;
+    }
+    .cta-title {
+      font-size: clamp(28px, 3vw, 44px); font-weight: 800;
+      color: #fff; letter-spacing: -.025em; line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .cta-sub {
+      font-size: 13px; color: rgba(255,255,255,.55);
+      line-height: 1.8; margin-bottom: 36px;
+    }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--orange); color: #fff;
+      font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px 28px; border-radius: 8px; text-decoration: none;
+      transition: opacity .2s; width: fit-content;
+    }
+    .btn-cta:hover { opacity: .85; }
+
+    .cta-visual {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* ── TABLET FRAME ─────────────────────────────────────── */
+    .tablet-frame {
+      width: 100%; max-width: 460px;
+      background: #1C1C1E;
+      border-radius: 26px;
+      padding: 16px 13px 22px;
+      position: relative;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.09),
+        0 0 0 2px #0d0d0d,
+        0 0 0 4px rgba(255,255,255,.04),
+        0 36px 90px rgba(0,0,0,.6),
+        0 8px 24px rgba(0,0,0,.35);
+    }
+    /* power button */
+    .tablet-frame::before {
+      content: '';
+      position: absolute;
+      right: -3px; top: 56px;
+      width: 3px; height: 32px;
+      background: #2a2a2c;
+      border-radius: 0 2px 2px 0;
+      box-shadow: 0 -38px 0 #2a2a2c, 0 -20px 0 #2a2a2c;
+    }
+    /* volume buttons */
+    .tablet-frame::after {
+      content: '';
+      position: absolute;
+      left: -3px; top: 56px;
+      width: 3px; height: 48px;
+      background: #2a2a2c;
+      border-radius: 2px 0 0 2px;
+      box-shadow: 0 60px 0 #2a2a2c;
+    }
+    .tablet-camera {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #2e2e30;
+      border: 1.5px solid rgba(255,255,255,.06);
+      margin: 0 auto 11px;
+    }
+    .tablet-bar {
+      width: 72px; height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,.2);
+      margin: 14px auto 0;
+    }
+    .cta-screen-img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+    }
+
+    /* ── SETUP ─────────────────────────────────────────────── */
+    .setup {
+      padding: 96px 64px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .setup-steps {
+      position: relative;
+      margin-top: 56px;
+    }
+    .setup-steps::before {
+      content: '';
+      position: absolute;
+      left: 27px; top: 56px; bottom: 56px;
+      width: 1px;
+      background: var(--border);
+    }
+    .setup-step {
+      display: flex;
+      gap: 40px;
+      padding: 32px 0;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; letter-spacing: .1em;
+      color: var(--muted);
+      position: relative; z-index: 1;
+    }
+    .step-body { flex: 1; padding-top: 14px; }
+    .step-title {
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -.01em; margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: 13.5px; line-height: 1.85;
+      color: var(--muted); margin-bottom: 24px;
+      max-width: 520px;
+    }
+    .step-form {
+      display: flex; gap: 20px; flex-wrap: wrap;
+    }
+    .step-field {
+      display: flex; flex-direction: column; gap: 7px;
+      flex: 1; min-width: 200px;
+    }
+    .step-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .step-field input {
+      font-family: 'Sora', 'Noto Sans JP', sans-serif;
+      font-size: 14px; font-weight: 600;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .step-field input:focus { border-color: var(--orange); }
+    .step-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .btn-step {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: 'Sora', 'Noto Sans JP', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: 12px 22px; border-radius: 8px;
+      background: var(--card-bg); color: var(--text);
+      border: 1.5px solid var(--border);
+      cursor: pointer; transition: border-color .2s, background .2s;
+    }
+    .btn-step:hover:not(:disabled) { border-color: var(--orange); }
+    .btn-step:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-step.btn-step-primary {
+      background: var(--orange); color: #fff; border-color: var(--orange);
+    }
+    .btn-step.btn-step-primary:hover:not(:disabled) { opacity: .85; }
+    .btn-step.connected {
+      background: rgba(200,71,26,.08); border-color: var(--orange); color: var(--orange);
+    }
+    .step-status {
+      font-size: 12.5px; color: var(--muted);
+      display: block; margin-top: 12px;
+    }
+    .step-status.ok { color: var(--orange); font-weight: 600; }
+    .write-diag {
+      display: none;
+      margin-top: 20px;
+      max-width: 520px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 12px;
+    }
+    .write-diag.visible { display: block; }
+    .write-diag-head {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .write-diag-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .write-diag-badge {
+      font-size: 11px; font-weight: 600;
+    }
+    .write-diag-badge.ok { color: #5A8A3C; }
+    .write-diag-badge.warn { color: var(--orange); }
+    .write-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 28px;
+      padding: 40px 44px;
+      border-radius: 18px;
+      background: var(--dark-bg);
+      text-align: center;
+    }
+    .write-success.visible {
+      display: flex;
+      animation: ws-in .4s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes ws-in {
+      from { opacity: 0; transform: translateY(12px); }
+    }
+    .write-success-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: #4A8A38;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .write-success-icon svg {
+      width: 24px; height: 24px;
+      stroke: #fff; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .write-success-title {
+      font-size: 24px; font-weight: 800; color: #fff;
+      letter-spacing: -.025em; margin-bottom: 10px;
+    }
+    .write-success-sub {
+      font-size: 13px; color: rgba(255,255,255,.58); line-height: 1.75; margin-bottom: 24px;
+    }
+    .write-success-info {
+      display: inline-block;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 10px; padding: 14px 28px;
+      font-size: 12.5px; color: rgba(255,255,255,.8); line-height: 1.9;
+      font-family: 'Sora', sans-serif;
+      text-align: left;
+    }
+    .write-success-info strong { color: #fff; }
+    .write-diag-row {
+      padding: 7px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted); word-break: break-all;
+    }
+    .write-diag-pre {
+      margin: 0; padding: 12px 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px; color: var(--text);
+      white-space: pre; overflow-x: auto;
+    }
+    .write-progress-wrap {
+      display: none;
+      margin-top: 20px;
+      max-width: 420px;
+    }
+    .write-progress-wrap.visible { display: block; }
+    .write-progress-track {
+      width: 100%; height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .write-progress-fill {
+      height: 100%;
+      background: var(--orange);
+      border-radius: 2px;
+      width: 0%;
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+    }
+    .write-progress-label {
+      font-size: 11px; letter-spacing: .04em;
+      color: var(--muted);
+    }
+
+    /* ── LICENSE ─────────────────────────────────────────── */
+    .license-section {
+      padding: 64px 64px 0;
+      border-top: 1px solid var(--border);
+    }
+    .license-header {
+      font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .license-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .license-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .license-card-name {
+      font-size: 12px; font-weight: 700; letter-spacing: -.01em;
+      margin-bottom: 4px;
+    }
+    .license-card-owner {
+      font-size: 11px; color: var(--muted); margin-bottom: 10px;
+    }
+    .license-badge {
+      display: inline-block;
+      font-size: 10px; font-weight: 700; letter-spacing: .06em;
+      padding: 3px 9px; border-radius: 4px;
+      background: rgba(200,71,26,.1); color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .license-badge.proprietary {
+      background: rgba(28,26,24,.08); color: var(--text);
+    }
+    .license-card-note {
+      font-size: 11px; color: var(--muted); line-height: 1.6;
+    }
+
+    .firmware-release {
+      margin: 0 64px 40px; padding: 28px;
+      border: 1px solid var(--border); border-radius: 16px;
+      text-align: center; background: var(--card-bg);
+    }
+    .firmware-release h2 { font-size: 15px; margin-bottom: 8px; }
+    .firmware-version { color: var(--orange); font-size: 30px; font-weight: 800; }
+    .firmware-release p { margin-top: 8px; font-size: 13px; }
+    .firmware-release a { color: var(--orange); text-underline-offset: 3px; }
+    .firmware-update-dialog {
+      position: fixed; inset: 0; margin: auto;
+      width: min(480px, calc(100vw - 32px));
+      max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow: auto;
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 28px; color: var(--text); background: var(--bg);
+      box-shadow: 0 16px 64px rgba(0,0,0,.25); font: inherit;
+    }
+    .firmware-update-dialog::backdrop { background: rgba(0,0,0,.5); }
+    .firmware-update-dialog h2 { font-size: 21px; margin-bottom: 16px; }
+    .firmware-update-dialog p { font-size: 14px; margin: 12px 0; }
+    .firmware-update-versions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+    .firmware-update-versions div { padding: 14px; border-radius: 10px; background: var(--card-bg); }
+    .firmware-update-versions dt { font-size: 12px; }
+    .firmware-update-versions dd { font-size: 22px; font-weight: 700; overflow-wrap: anywhere; }
+    .firmware-update-actions { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+    @media (max-width: 640px) { .firmware-release { margin: 0 24px 32px; padding: 24px 16px; } }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      padding: 28px 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+    .foot-left {}
+    .foot-logo { margin-bottom: 4px; }
+    .foot-copy { font-size: 10px; color: var(--muted); letter-spacing: .03em; }
+.foot-links {
+      display: flex; align-items: center; gap: 24px; list-style: none;
+    }
+    .foot-links a {
+      font-size: 10px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
+      text-decoration: none; color: var(--muted);
+      transition: color .2s;
+    }
+    .foot-links a:hover { color: var(--text); }
+    .foot-gh {
+      display: flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid var(--border);
+      color: var(--muted); text-decoration: none;
+      transition: border-color .2s, color .2s;
+    }
+    .foot-gh:hover { border-color: var(--text); color: var(--text); }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 960px) {
+      nav { padding: 18px 32px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 40px 32px; height: auto; min-height: auto; gap: 0; }
+      .hero-visual { order: -1; min-height: 300px; margin-bottom: 32px; background-position: center center; }
+      .hero-vert, .hero-no { display: none; }
+      .features { padding: 64px 32px; }
+      .feat-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+      .cta-wrap { padding: 0 32px 64px; }
+      .cta { grid-template-columns: 1fr; padding: 44px 36px; gap: 36px; }
+      .cta-visual { justify-content: center; }
+      .setup { padding: 64px 32px; }
+      .setup-steps::before { left: 23px; }
+      .step-num { width: 48px; height: 48px; font-size: 11px; }
+      .step-form { flex-direction: column; gap: 14px; }
+      footer { padding: 24px 32px; flex-direction: column; gap: 20px; text-align: center; }
+      .license-section { padding: 48px 32px 0; }
+      .license-grid { grid-template-columns: 1fr; gap: 12px; }
+    }
+    @media (max-width: 540px) {
+      .feat-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Loader ───────────────────────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .5s ease;
+    }
+    #loader .nbw {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: loader-in .55s cubic-bezier(.16,1,.3,1) .15s forwards;
+    }
+    @keyframes loader-in {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #loader.hide { opacity: 0; pointer-events: none; }
+    .nbw.s-full { gap: 18px; }
+    .nbw.s-full .nbw-mark { width: 64px; height: 52px; }
+    .nbw.s-full .nbw-type { font-size: 30px; }
+    .nbw.s-full .nbw-bar  { width: .1em; height: .74em; margin: 0 .34em; }
+
+    /* ── Page reveal (triggered by body.loaded) ───────────────── */
+    nav,
+    .hero-headline, .hero-sub, .hero-desc, .hero-btns, .hero-visual {
+      opacity: 0;
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    nav { transform: translateY(-6px); }
+    .hero-headline, .hero-sub, .hero-desc, .hero-btns, .hero-visual { transform: translateY(16px); }
+
+    body.loaded nav            { opacity: 1; transform: none; }
+    body.loaded .hero-headline { opacity: 1; transform: none; transition-delay: .05s; }
+    body.loaded .hero-sub      { opacity: 1; transform: none; transition-delay: .12s; }
+    body.loaded .hero-desc     { opacity: 1; transform: none; transition-delay: .19s; }
+    body.loaded .hero-btns     { opacity: 1; transform: none; transition-delay: .27s; }
+    body.loaded .hero-visual   { opacity: 1; transform: none; transition-delay: .14s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      #loader .nbw { animation: none; opacity: 1; transform: none; }
+      nav, .hero-headline, .hero-sub, .hero-desc, .hero-btns, .hero-visual {
+        opacity: 1; transform: none; transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true">
+  <div class="nbw s-full">
+    <svg class="nbw-mark" viewBox="0 0 66 54" fill="none">
+      <rect x="38" y="0" width="13" height="30" rx="3.25" fill="var(--orange)" transform="rotate(32 44.5 30)"/>
+      <rect x="8"  y="8" width="14" height="34" rx="3.5"  fill="currentColor"/>
+      <rect x="8"  y="28" width="34" height="14" rx="3.5" fill="currentColor"/>
+      <polygon points="8,13 0,17 8,21" fill="var(--orange)"/>
+      <circle cx="15" cy="16" r="2.2" fill="var(--bg)"/>
+    </svg>
+    <div class="nbw-type">Nest<i>Blocks</i><span class="nbw-bar"></span><span class="nbw-ed">Wren</span></div>
+  </div>
+</div>
+
+<!-- ══ NAV ════════════════════════════════════════════════ -->
+<nav>
+  <a href="#" class="nbw s-nav">
+    <svg class="nbw-mark" viewBox="0 0 66 54" fill="none">
+      <rect x="38" y="0" width="13" height="30" rx="3.25" fill="var(--orange)" transform="rotate(32 44.5 30)"/>
+      <rect x="8"  y="8" width="14" height="34" rx="3.5"  fill="currentColor"/>
+      <rect x="8"  y="28" width="34" height="14" rx="3.5" fill="currentColor"/>
+      <polygon points="8,13 0,17 8,21" fill="var(--orange)"/>
+      <circle cx="15" cy="16" r="2.2" fill="var(--bg)"/>
+    </svg>
+    <div class="nbw-type">Nest<i>Blocks</i><span class="nbw-bar"></span><span class="nbw-ed">Wren</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#setup">Setup</a></li>
+    <li><a href="#howto">起動方法</a></li>
+  </ul>
+  <a href="#setup" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- ══ HERO ═══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-headline" lang="en">
+      A world<br>
+      <span class="accent">within.</span>
+    </h1>
+    <p class="hero-sub">つくる世界。この中に。</p>
+    <p class="hero-desc">
+      プログラミング環境を、Pico Wにまるごと。<br>
+      初回設定のあとは、Wi-Fiにつないでブラウザを開くだけ。<br>
+      インターネットすら、いりません。
+    </p>
+    <div class="hero-btns">
+      <a href="#setup" class="btn-primary">
+        Get Started
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/>
+        </svg>
+      </a>
+      <a href="#features" class="btn-ghost">Features</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-vert">PERCHD&nbsp;&bull;&nbsp;STILL</div>
+    <div class="hero-no">
+      <div class="hero-no-n">NO.47</div>
+      <div class="hero-no-l">Calm</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ═══════════════════════════════════════════ -->
+<section class="features" id="features">
+  <p class="sec-tag">Features</p>
+  <h2 class="sec-title">ケーブルなし、すぐはじめられる。</h2>
+  <div class="sec-rule"><div class="sec-dot"></div></div>
+
+  <div class="feat-grid">
+
+    <div class="feat-item">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24">
+          <rect x="3"  y="3"  width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3"  width="7" height="7" rx="1.5"/>
+          <rect x="3"  y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+      </div>
+      <p class="feat-name">ビジュアルプログラミング</p>
+      <p class="feat-desc">ブロックを組み合わせるだけで MicroPython コードが自動生成。はじめての人でも直感的に動かせます。</p>
+    </div>
+
+    <div class="feat-item">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+          <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+          <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <p class="feat-name">Wi-Fi でどこでも</p>
+      <p class="feat-desc">Pico W が作る Wi-Fi アクセスポイントに接続するだけ。Wifiのない環境でもタブレットのブラウザからそのまま使えます。</p>
+    </div>
+
+    <div class="feat-item">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24">
+          <polyline points="16 16 12 12 8 16"/>
+          <line x1="12" y1="12" x2="12" y2="21"/>
+          <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+        </svg>
+      </div>
+      <p class="feat-name">ワンクリック書き込み</p>
+      <p class="feat-desc">完成したプログラムを Pico W へ即転送。RUN ピンを HIGH にするだけで次回起動時に自動実行されます。</p>
+    </div>
+
+    <div class="feat-item">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24">
+          <polyline points="4 17 10 11 4 5"/>
+          <line x1="12" y1="19" x2="20" y2="19"/>
+        </svg>
+      </div>
+      <p class="feat-name">リアルタイムコンソール</p>
+      <p class="feat-desc">実行中の出力をブラウザでリアルタイムに確認。センサー値のデバッグやエラーの確認がすぐできます。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ HOW TO USE ══════════════════════════════════════════ -->
+<section class="howto" id="howto">
+  <p class="sec-tag" style="text-align:center">How to Use</p>
+  <h2 class="sec-title" style="text-align:center">設定が終わったら、つないで開く。</h2>
+  <p class="guide-intro">初回だけ、PC から Pico W への<a href="#setup">インストール</a>が必要です。設定済みの Pico W は、次の手順で起動できます。</p>
+  <div class="sec-rule"><div class="sec-dot"></div></div>
+
+  <div class="howto-grid">
+
+    <div class="howto-step">
+      <p class="howto-num">STEP 01</p>
+      <div class="howto-icon-wrap">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+          <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+          <circle cx="12" cy="20" r="1" fill="var(--orange)" stroke="none"/>
+        </svg>
+      </div>
+      <p class="howto-step-title">Pico W の電源を入れる</p>
+      <p class="howto-step-desc">設定済みの Pico W に USB などで電源を供給し、起動を待ちます。編集画面を開くときは、RUNモードに対応しているピン(GPIO22)の接続を解除してください。</p>
+    </div>
+
+    <div class="howto-arrow">
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+    </div>
+
+    <div class="howto-step">
+      <p class="howto-num">STEP 02</p>
+      <div class="howto-icon-wrap">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+      </div>
+      <p class="howto-step-title">Wren の Wi-Fi に接続する</p>
+      <p class="howto-step-desc">使う端末の「設定」から Wi-Fi を開き、初期設定で決めた名前（例：Wren-01）を選び、パスワードを入力します。「インターネット接続なし」と表示されても、そのまま接続を維持してください。</p>
+    </div>
+
+    <div class="howto-arrow">
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+    </div>
+
+    <div class="howto-step">
+      <p class="howto-num">STEP 03</p>
+      <div class="howto-icon-wrap">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <polygon points="10,8 17,12 10,16" fill="var(--orange)" stroke="none"/>
+        </svg>
+      </div>
+      <p class="howto-step-title">ブラウザで Wren を開く</p>
+      <p class="howto-step-desc">Safari・Chrome・Edge などを開き、画面上部のアドレス欄に <strong>http://192.168.4.1/</strong> と入力します。下の QR コードからも開けます。編集画面と「Wren 接続済み」が表示されたら準備完了です。</p>
+    </div>
+
+  </div>
+  <div class="guide-access">
+    <figure class="guide-qr">
+      <img src="wren-access-qr.png" width="220" height="220" alt="NestBlocks Wren 起動用QRコード。アクセス先 http://192.168.4.1/">
+      <figcaption>Wi-Fi 接続後、カメラで読み取る</figcaption>
+    </figure>
+    <div>
+      <h3>入力せずに、編集画面へ。</h3>
+      <p><strong>先に、開きたい端末を Wren の Wi-Fi につないでください。</strong>この QR コードは Wi-Fi の設定用ではなく、編集画面を開くためのものです。</p>
+      <a class="guide-url" href="http://192.168.4.1/">http://192.168.4.1/</a>
+      <p>このページを見ている端末で使う場合は、上のリンクをタップしてください。Wi-Fi に接続しただけでは、ブラウザは自動で開きません。</p>
+    </div>
+  </div>
+  <div class="guide-note">
+    <h3>次回からは、アイコンやブックマークで</h3>
+    <p><strong>iPad：</strong>Safari で Wren を開き、「共有」→「ホーム画面に追加」→「追加」。オレンジ色の鳥のアイコンが目印です。<a href="https://support.apple.com/ja-jp/guide/ipad/ipadc602b75b/ipados" target="_blank" rel="noopener noreferrer">Apple の操作案内</a></p>
+    <p><strong>Windows・Mac・Chromebook・Android：</strong>ブラウザのブックマークに登録しておくと便利です。次回も先に Wren の Wi-Fi に接続してから、アイコンやブックマークで開いてください。</p>
+  </div>
+  <details class="guide-help">
+    <summary>Wi-Fi が見つからない・画面が開かないとき</summary>
+    <p>Pico W に電源が入っているか、選んだ Wi-Fi が初期設定時の名前と一致しているか確認してください。RUN スイッチがある場合は EDIT 側にして、電源を入れ直します。</p>
+    <p>ブラウザのアドレスが <strong>http://192.168.4.1/</strong> になっているか確認してください。「https」や検索欄への入力では開けない場合があります。Wren の Wi-Fi に接続し直してからページを再読み込みしてください。</p>
+  </details>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════════════ -->
+<div class="cta-wrap">
+  <div class="cta">
+
+    <div>
+      <p class="cta-tag">Setup</p>
+      <h2 class="cta-title">さあ、はじめよう。</h2>
+      <p class="cta-sub">Pico W に NestBlocks Wren を書き込めば準備完了。セットアップは 3 ステップで終わります。</p>
+      <a href="#setup" class="btn-cta">
+        セットアップを始める
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="cta-visual">
+      <div class="tablet-frame">
+        <div class="tablet-camera"></div>
+        <img class="cta-screen-img" src="NestBlocks_Wren_screen.jpg" alt="NestBlocks Wren スクリーンショット">
+        <div class="tablet-bar"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SETUP ════════════════════════════════════════════════ -->
+<section class="setup" id="setup">
+  <p class="sec-tag">Setup</p>
+  <h2 class="sec-title">初回だけ、PC からインストール。</h2>
+  <div class="sec-rule"><div class="sec-dot"></div></div>
+
+  <div class="guide-note">
+    <h3>用意するもの</h3>
+    <p>Raspberry Pi Pico W、データ通信に対応した USB ケーブル、Chrome または Edge が使える PC を用意してください。このページの USB 書き込みは PC で行います。インストール後は iPad などの端末から Wi-Fi 経由で使えます。</p>
+    <p>学校などで設定済みの Pico W を受け取った方は、再インストールせず<a href="#howto">起動方法へ進んでください。</a></p>
+    <details class="guide-help">
+      <summary>新品の Pico W を使う場合：先に MicroPython を入れる</summary>
+      <p>これは新品のPicoWを購入した場合に必要な作業です。すでにMicroPythonが使える状態のPicoWがある場合にはこの作業は必要ありません。</p>
+      <ol>
+        <li>PC で<a href="https://micropython.org/download/RPI_PICO_W/" target="_blank" rel="noopener noreferrer">MicroPython の Pico W 用ダウンロードページ</a>を開き、安定版の UF2 ファイルをダウンロードします。</li>
+        <li>Pico W の BOOTSEL ボタンを押しながら PC に USB 接続します。「RPI-RP2」ドライブが表示されたらボタンを離します。</li>
+        <li>UF2 ファイルを「RPI-RP2」にコピーします。ドライブが消えて Pico W が再起動したら、下の手順へ進みます。</li>
+      </ol>
+      <p>MicroPython がインストール済みの場合、この作業は不要です。以降の USB 接続では BOOTSEL を押さずに接続してください。</p>
+    </details>
+  </div>
+
+  <div class="setup-steps">
+
+    <div class="setup-step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <h3 class="step-title">ネットワークを設定する</h3>
+        <p class="step-desc">Pico W が発信する Wi-Fi の名前とパスワードを決めます。自宅や学校の Wi-Fi の情報を入力する欄ではありません。複数台で使う場合は Wren-01、Wren-02 のように名前を分け、接続する人に名前とパスワードを伝えてください。</p>
+        <div class="step-form">
+          <label class="step-field">
+            <span class="step-label">ネットワーク名 (SSID)</span>
+            <input type="text" id="cfg-ssid" value="" maxlength="32" spellcheck="false" autocomplete="off" placeholder="ネットワーク名(SSID)を入力">
+          </label>
+          <label class="step-field">
+            <span class="step-label">パスワード（8文字以上）</span>
+            <input type="password" id="cfg-pass" value="" maxlength="63" spellcheck="false" autocomplete="off" placeholder="パスワードを入力">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <h3 class="step-title">USB で接続する</h3>
+        <p class="step-desc">MicroPython を入れた Pico W を、データ通信対応の USB ケーブルで PC に接続します。このページを Chrome または Edge で開き、下の「USB を接続する」を押してください。選択画面で Pico W のシリアルポートを選び、接続を許可します。候補が出ない場合はケーブルを確認し、Thonny など同じポートを使うアプリを閉じてください。</p>
+        <div class="step-actions">
+          <button class="btn-step" id="setup-connect-btn" onclick="setupConnect()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            USB を接続する
+          </button>
+        </div>
+        <span class="step-status" id="setup-connect-status"></span>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <h3 class="step-title">マイコンに書き込む</h3>
+        <p class="step-desc">「書き込みを開始する」を押し、「インストール完了」と表示されるまで、ページを閉じずに待ってください。途中で USB を抜かないでください。完了後に USB を抜き差しして電源を入れ直し、<a href="#howto">起動方法</a>に沿って使う端末を Wren の Wi-Fi に接続します。</p>
+        <div class="step-actions">
+          <button class="btn-step btn-step-primary" id="setup-write-btn" onclick="setupWrite()" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            書き込みを開始する
+          </button>
+        </div>
+        <div class="write-progress-wrap" id="write-progress-wrap">
+          <div class="write-progress-track">
+            <div class="write-progress-fill" id="write-progress-fill"></div>
+          </div>
+          <span class="write-progress-label" id="write-progress-label"></span>
+        </div>
+        <span class="step-status" id="setup-write-status"></span>
+        <div class="write-diag" id="write-diag">
+          <div class="write-diag-head">
+            <span class="write-diag-label">診断情報 — /wren/</span>
+            <span class="write-diag-badge" id="write-diag-badge"></span>
+          </div>
+          <div class="write-diag-row" id="write-diag-files"></div>
+          <pre class="write-diag-pre" id="write-diag-pre"></pre>
+        </div>
+        <div class="write-success" id="write-success">
+          <div class="write-success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="4 12 9 17 20 7"/></svg>
+          </div>
+          <div class="write-success-title">インストール完了</div>
+          <p class="write-success-sub">
+            NestBlocks Wren がすべて書き込まれました。<br>
+            USB を抜いて電源を入れ直すと起動します。
+          </p>
+          <div class="write-success-info" id="write-success-info"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ LICENSE ════════════════════════════════════════════ -->
+<div class="license-section">
+  <p class="license-header">Licenses</p>
+  <div class="license-grid">
+
+    <div class="license-card">
+      <p class="license-card-name">NestBlocks Wren</p>
+      <p class="license-card-owner">Copyright © 2026 Mimir</p>
+      <span class="license-badge proprietary">All Rights Reserved</span>
+      <p class="license-card-note">本ソフトウェアのオリジナルコード（firmware/・src/ 等）は著作権者が全権利を保有します。書面による許可なく複製・改変・再配布を禁じます。</p>
+    </div>
+
+<div class="license-card">
+      <p class="license-card-name">Blockly</p>
+      <p class="license-card-owner">Copyright © Google LLC</p>
+      <span class="license-badge">Apache License 2.0</span>
+      <p class="license-card-note">本製品は Google LLC が開発した Blockly を含みます。Apache License 2.0 に基づき使用しています。原著作権表示および同ライセンス文を保持します。</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════ -->
+<section class="firmware-release" aria-labelledby="firmwareReleaseTitle">
+  <h2 id="firmwareReleaseTitle">現在配布中のファームウェア</h2>
+  <div class="firmware-version" id="firmwareVersion">確認中…</div>
+  <p id="firmwarePrevious" aria-live="polite"></p>
+  <p>履歴はこのブラウザに保存されます。別の端末・ブラウザや、履歴を消去した場合は引き継がれません。</p>
+  <p><a href="#setup">インストール・更新はこちら</a></p>
+</section>
+<dialog class="firmware-update-dialog" id="firmwareUpdateDialog" aria-labelledby="firmwareUpdateTitle" aria-describedby="firmwareUpdateDetail">
+  <h2 id="firmwareUpdateTitle" tabindex="-1" autofocus>新しいバージョンがあります</h2>
+  <p id="firmwareUpdateDetail"></p>
+  <dl class="firmware-update-versions">
+    <div><dt>前回書き込んだ版</dt><dd id="firmwareUpdatePrevious"></dd></div>
+    <div><dt>現在配布中の版</dt><dd id="firmwareUpdateLatest"></dd></div>
+  </dl>
+  <p>更新するには、PC に Pico W を USB 接続して、インストール手順に沿って書き込んでください。</p>
+  <div class="firmware-update-actions">
+    <button class="btn-step" type="button" data-update-later>あとで</button>
+    <button class="btn-step btn-step-primary" type="button" data-update-setup>更新手順へ</button>
+  </div>
+</dialog>
+<footer>
+  <div class="foot-left">
+    <a href="#" class="foot-logo nbw s-foot">
+      <svg class="nbw-mark" viewBox="0 0 66 54" fill="none">
+        <rect x="38" y="0" width="13" height="30" rx="3.25" fill="var(--orange)" transform="rotate(32 44.5 30)"/>
+        <rect x="8"  y="8" width="14" height="34" rx="3.5"  fill="currentColor"/>
+        <rect x="8"  y="28" width="34" height="14" rx="3.5" fill="currentColor"/>
+        <polygon points="8,13 0,17 8,21" fill="var(--orange)"/>
+        <circle cx="15" cy="16" r="2.2" fill="var(--bg)"/>
+      </svg>
+      <div class="nbw-type">Nest<i>Blocks</i><span class="nbw-bar"></span><span class="nbw-ed">Wren</span></div>
+    </a>
+    <p class="foot-copy">© 2026 Mimir. All Rights Reserved.</p>
+  </div>
+
+  <ul class="foot-links">
+    <li><a href="#">GitHub</a></li>
+    <li><a href="#">Docs</a></li>
+    <li><a href="#">Contact</a></li>
+    <li>
+      <a href="#" class="foot-gh" title="GitHub">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+      </a>
+    </li>
+  </ul>
+</footer>
+
+<script src="firmware.js?v=866e78d6de6b"></script>
+<script src="updates.js?v=4ffcb8edfb79"></script>
+<script>
+(function () {
+  'use strict';
+  var _port = null, _writer = null, _readBuf = '';
+
+  /* ── UI helpers ─────────────────────────────────────────── */
+  function _setStatus(id, msg, isOk) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'step-status' + (isOk ? ' ok' : '');
+  }
+
+  function _setProgress(pct, label) {
+    var wrap = document.getElementById('write-progress-wrap');
+    var fill = document.getElementById('write-progress-fill');
+    var lbl  = document.getElementById('write-progress-label');
+    if (wrap) wrap.classList.add('visible');
+    if (fill) fill.style.width = pct + '%';
+    if (lbl && label !== undefined) lbl.textContent = label;
+  }
+
+  function _resetProgress() {
+    var wrap = document.getElementById('write-progress-wrap');
+    var fill = document.getElementById('write-progress-fill');
+    var lbl  = document.getElementById('write-progress-label');
+    if (wrap) wrap.classList.remove('visible');
+    if (fill) fill.style.width = '0%';
+    if (lbl)  lbl.textContent = '';
+  }
+
+  /* ── Serial helpers ─────────────────────────────────────── */
+  async function _startRead() {
+    var reader = _port.readable.getReader();
+    var dec = new TextDecoder();
+    try {
+      while (true) {
+        var r = await reader.read();
+        if (r.done) break;
+        _readBuf += dec.decode(r.value);
+      }
+    } catch (e) {
+    } finally {
+      try { reader.releaseLock(); } catch (e) {}
+    }
+  }
+
+  async function _send(s) {
+    if (_writer) await _writer.write(new TextEncoder().encode(s));
+  }
+
+  /* Wait until buf contains s; return true or false on timeout */
+  async function _waitFor(s, ms) {
+    var end = Date.now() + ms;
+    while (Date.now() < end) {
+      var i = _readBuf.indexOf(s);
+      if (i !== -1) { _readBuf = _readBuf.slice(i + s.length); return true; }
+      await new Promise(function (r) { setTimeout(r, 40); });
+    }
+    return false;
+  }
+
+  /* Read until marker; return content BEFORE marker, or null on timeout.
+     Unlike _waitFor this preserves what came before the marker. */
+  async function _readUntil(marker, ms) {
+    var end = Date.now() + ms;
+    while (Date.now() < end) {
+      var i = _readBuf.indexOf(marker);
+      if (i !== -1) {
+        var before = _readBuf.slice(0, i);
+        _readBuf = _readBuf.slice(i + marker.length);
+        return before;
+      }
+      await new Promise(function (r) { setTimeout(r, 40); });
+    }
+    return null;
+  }
+
+  /* ── Connect ────────────────────────────────────────────── */
+  window.setupConnect = async function () {
+    if (!('serial' in navigator)) {
+      _setStatus('setup-connect-status', 'このブラウザは Web Serial に対応していません。Google Chrome をお使いください。');
+      return;
+    }
+    _setStatus('setup-connect-status', '接続中...');
+    try {
+      _port = await navigator.serial.requestPort({ filters: [{ usbVendorId: 0x2E8A }] });
+      await _port.open({ baudRate: 115200 });
+      _writer = _port.writable.getWriter();
+      _startRead();
+      var btn = document.getElementById('setup-connect-btn');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 接続済み';
+      btn.classList.add('connected');
+      btn.disabled = true;
+      _setStatus('setup-connect-status', '');
+      document.getElementById('setup-write-btn').disabled = false;
+    } catch (e) {
+      if (e.name !== 'NotFoundError') {
+        _setStatus('setup-connect-status', 'エラー: ' + (e.message || '不明なエラー'));
+      } else {
+        _setStatus('setup-connect-status', '');
+      }
+    }
+  };
+
+
+  /* ── File writer helper ──────────────────────────────────── */
+  function _escForPy(s) {
+    // チャンク境界で CRLF が分かれても Python の文字列を壊さない。
+    return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+            .replace(/\r/g, '\\r').replace(/\n/g, '\\n');
+  }
+
+  /* テキストファイルを 1024 文字チャンクずつ個別の Raw REPL 実行で書き込む */
+  async function _writeFileToPico(remotePath, content) {
+    var CHUNK = 1024;
+    for (var i = 0; i < content.length; i += CHUNK) {
+      var mode = i === 0 ? 'w' : 'a';
+      var escaped = _escForPy(content.slice(i, i + CHUNK));
+      var code = "f=open('" + remotePath + "','" + mode + "')\nf.write('" + escaped + "')\nf.close()";
+      await _send(code + '\x04');
+      if (!await _waitFor('OK', 8000)) throw new Error(remotePath + ' チャンク' + Math.floor(i / CHUNK) + ' 送信失敗');
+      await _readUntil('\x04', 20000);
+      var werr = await _readUntil('\x04', 2000);
+      if (werr === null) throw new Error(remotePath + ' 書き込み結果の受信がタイムアウトしました');
+      if (werr && werr.trim()) throw new Error(remotePath + ' エラー: ' + werr.trim());
+    }
+  }
+
+  /* base64 チャンク配列をバイナリファイルとして書き込む (gz など) */
+  async function _writeBinaryChunksToPico(remotePath, chunks) {
+    for (var ci = 0; ci < chunks.length; ci++) {
+      var mode = ci === 0 ? 'wb' : 'ab';
+      var code = "import ubinascii\nf=open('" + remotePath + "','" + mode + "')\nf.write(ubinascii.a2b_base64('" + chunks[ci] + "'))\nf.close()";
+      await _send(code + '\x04');
+      if (!await _waitFor('OK', 8000)) throw new Error(remotePath + ' チャンク' + ci + ' 送信失敗');
+      await _readUntil('\x04', 20000);
+      var err = await _readUntil('\x04', 2000);
+      if (err === null) throw new Error(remotePath + ' 書き込み結果の受信がタイムアウトしました');
+      if (err && err.trim()) throw new Error(remotePath + ' チャンク' + ci + ' エラー: ' + err.trim());
+    }
+  }
+
+  /* ── Diagnostic display ─────────────────────────────────── */
+  var REQUIRED_FILES = ['server.py','api.py','runner.py','storage.py',
+                        'console.py','led.py','dns.py','portal.py'];
+
+  function _showDiag(files, cfg) {
+    var diag   = document.getElementById('write-diag');
+    var dFiles = document.getElementById('write-diag-files');
+    var dPre   = document.getElementById('write-diag-pre');
+    var dBadge = document.getElementById('write-diag-badge');
+    if (!diag) return;
+    diag.classList.add('visible');
+
+    var fileList = files ? files.split(',').map(function(f){ return f.trim(); }) : [];
+    var missing  = REQUIRED_FILES.filter(function(f){ return fileList.indexOf(f) === -1; });
+
+    dFiles.textContent = '/wren/ に ' + fileList.length + ' ファイル: ' + (files || '(取得失敗)');
+    dPre.textContent   = cfg || '(読み取り失敗)';
+
+    if (missing.length === 0) {
+      dBadge.textContent = '✓ ファイル完全';
+      dBadge.className   = 'write-diag-badge ok';
+    } else {
+      dBadge.textContent = '⚠ 不足: ' + missing.join(', ');
+      dBadge.className   = 'write-diag-badge warn';
+    }
+  }
+
+  /* ── Write ──────────────────────────────────────────────── */
+  window.setupWrite = async function () {
+    var ssid = document.getElementById('cfg-ssid').value.trim();
+    var pass = document.getElementById('cfg-pass').value.trim();
+    if (!ssid) { _setStatus('setup-write-status', 'ネットワーク名を入力してください'); return; }
+    if (pass.length > 0 && pass.length < 8) { _setStatus('setup-write-status', 'パスワードは 8 文字以上にしてください'); return; }
+    if (!_writer) { _setStatus('setup-write-status', 'まず USB を接続してください'); return; }
+
+    var writeBtn = document.getElementById('setup-write-btn');
+    writeBtn.disabled = true;
+    _setStatus('setup-write-status', '');
+    _resetProgress();
+    var diagEl = document.getElementById('write-diag');
+    if (diagEl) diagEl.classList.remove('visible');
+    var successEl = document.getElementById('write-success');
+    if (successEl) successEl.classList.remove('visible');
+
+    try {
+      /* Stage 1 — 停止 */
+      _setProgress(3, 'プログラムを停止中...');
+      await _send('\x03\x03');
+      await new Promise(function (r) { setTimeout(r, 1500); });
+
+      /* Stage 2 — Raw REPL */
+      _setProgress(6, 'REPL に接続中...');
+      _readBuf = '';
+      await _send('\x01');
+      if (!await _waitFor('raw REPL', 6000)) {
+        throw new Error('Raw REPL に入れませんでした。USB 接続と Pico W の状態を確認してください。');
+      }
+      await _waitFor('>', 2000);
+
+      /* 再生成できる Wren アセットだけを削除して更新用の空きを確保する。
+         /projects、/user_program.py、/lib は変更しない。 */
+      _setProgress(8, '更新用の保存領域を準備中...');
+      await _send([
+        'import os',
+        'try: names=os.listdir("/www")',
+        'except OSError as e:',
+        ' if e.args[0] != 2: raise',
+        ' names=[]',
+        'for n in names:',
+        ' parts=n.split(".")',
+        ' if len(parts)==4 and parts[0]=="app" and len(parts[1])==12 and all(c in "0123456789abcdef" for c in parts[1]) and parts[2] in ("js","css") and parts[3]=="gz":',
+        '  os.remove("/www/"+n)',
+        'print("CLEAN_OK")'
+      ].join('\n') + '\x04');
+      if (!await _waitFor('OK', 8000)) throw new Error('保存領域の準備コマンドが受け付けられませんでした。');
+      var cleanOut = await _readUntil('\x04', 20000);
+      var cleanErr = await _readUntil('\x04', 5000);
+      if (cleanOut === null || cleanErr === null) throw new Error('保存領域の準備がタイムアウトしました。');
+      if (cleanErr.trim()) throw new Error('保存領域の準備エラー: ' + cleanErr.trim());
+      if (cleanOut.indexOf('CLEAN_OK') === -1) throw new Error('保存領域の準備を確認できませんでした。');
+
+      /* Stage 3 — ディレクトリ作成 */
+      _setProgress(9, 'ディレクトリを準備中...');
+      await _send([
+        'import os',
+        'dirs=["/wren","/www","/projects"]',
+        'for d in dirs:',
+        ' try: os.mkdir(d)',
+        ' except: pass',
+        'print("DIRS_OK")'
+      ].join('\n') + '\x04');
+      if (!await _waitFor('OK', 5000)) throw new Error('ディレクトリ作成コマンドが受け付けられませんでした。');
+      var dirsOut = await _readUntil('\x04', 8000);
+      var dirsErr = await _readUntil('\x04', 2000);
+      if (dirsOut === null || dirsErr === null) throw new Error('ディレクトリ作成がタイムアウトしました。');
+      if (dirsErr.trim()) throw new Error('ディレクトリ作成エラー: ' + dirsErr.trim());
+
+      /* Stage 4 — Python ファームウェアファイルを書き込む (12 ファイル, 10%→50%) */
+      var fwKeys = Object.keys(FIRMWARE);
+      for (var fi = 0; fi < fwKeys.length; fi++) {
+        var pct = 10 + Math.round(fi / fwKeys.length * 40);
+        _setProgress(pct, fwKeys[fi] + ' を書き込み中...');
+        await _writeFileToPico(fwKeys[fi], FIRMWARE[fwKeys[fi]]);
+      }
+
+      /* Stage 5 — www/ ファイルを書き込む (50%→85%)
+         テキスト・バイナリとも 1 チャンク = 1 Raw REPL 実行で進捗更新 */
+      var TXT_CHUNK = 1024;
+      var totalWwwChunks = WWW_FILES.reduce(function(s, f) {
+        if (f.chunks) return s + f.chunks.length;
+        return s + Math.ceil(f.text.length / TXT_CHUNK);
+      }, 0);
+      var wwwChunksDone = 0;
+      for (var wi = 0; wi < WWW_FILES.length; wi++) {
+        var wf = WWW_FILES[wi];
+        if (wf.text !== undefined) {
+          /* テキストファイル (index.html): チャンク単位で書き込み */
+          var txtChunks = Math.ceil(wf.text.length / TXT_CHUNK);
+          for (var ti = 0; ti < txtChunks; ti++) {
+            _setProgress(50 + Math.round(wwwChunksDone / totalWwwChunks * 35),
+                         wf.path + ' (' + (ti + 1) + '/' + txtChunks + ')...');
+            var tmode = ti === 0 ? 'w' : 'a';
+            var tslice = wf.text.slice(ti * TXT_CHUNK, (ti + 1) * TXT_CHUNK);
+            var tcode = "f=open('" + wf.path + "','" + tmode + "')\nf.write('" + _escForPy(tslice) + "')\nf.close()";
+            await _send(tcode + '\x04');
+            if (!await _waitFor('OK', 8000)) throw new Error(wf.path + ' チャンク' + ti + ' 送信失敗');
+            await _readUntil('\x04', 20000);
+            var terr = await _readUntil('\x04', 2000);
+            if (terr === null) throw new Error(wf.path + ' 書き込み結果の受信がタイムアウトしました');
+            if (terr && terr.trim()) throw new Error(wf.path + ' エラー: ' + terr.trim());
+            wwwChunksDone++;
+          }
+        } else {
+          /* バイナリファイル (.gz): base64 チャンク単位で書き込み */
+          for (var ci = 0; ci < wf.chunks.length; ci++) {
+            _setProgress(50 + Math.round(wwwChunksDone / totalWwwChunks * 35),
+                         wf.path + ' (' + (ci + 1) + '/' + wf.chunks.length + ')...');
+            var bmode = ci === 0 ? 'wb' : 'ab';
+            var bcode = "import ubinascii\nf=open('" + wf.path + "','" + bmode + "')\nf.write(ubinascii.a2b_base64('" + wf.chunks[ci] + "'))\nf.close()";
+            await _send(bcode + '\x04');
+            if (!await _waitFor('OK', 8000)) throw new Error(wf.path + ' チャンク' + ci + ' 送信失敗');
+            await _readUntil('\x04', 25000);
+            var werr = await _readUntil('\x04', 2000);
+            if (werr === null) throw new Error(wf.path + ' 書き込み結果の受信がタイムアウトしました');
+            if (werr && werr.trim()) throw new Error(wf.path + ' エラー: ' + werr.trim());
+            wwwChunksDone++;
+          }
+        }
+      }
+
+      /* Stage 6 — config.py (チーム設定) */
+      _setProgress(87, 'config.py を書き込み中...');
+      var teamNum = parseInt((ssid.match(/(\d+)$/) || ['', '1'])[1]) || 1;
+      var channel = [1, 6, 11][(teamNum - 1) % 3];
+      var sSsid = ssid.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      var sPass = pass.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      var cfgContent = [
+        // カスタム設定に置き換えた後も、配布コードの出所表示を残す。
+        FIRMWARE['/wren/config.py'].split('\n').slice(0, 2).join('\n'),
+        'TEAM_NUM=' + teamNum,
+        "SSID='" + sSsid + "'",
+        "PASSWORD='" + sPass + "'",
+        'CHANNEL=' + channel,
+        "IP='192.168.4.1'",
+        "VERSION='" + _escForPy(WREN_RELEASE.version) + "'",
+        "EDITION='wren'"
+      ].join('\n') + '\n';
+      await _writeFileToPico('/wren/config.py', cfgContent);
+
+      /* Stage 6 — 診断: /wren/ ファイル一覧と config.py 読み返し */
+      _setProgress(94, '診断情報を取得中...');
+      var diagCode = [
+        'import os',
+        'try:',
+        ' fl=",".join(os.listdir("/wren"))',
+        ' cb=open("/wren/config.py").read()',
+        ' print("===FILES===")',
+        ' print(fl)',
+        ' print("===CFG===")',
+        ' print(cb)',
+        'except Exception as e2: print("===DIAGERR==="+str(e2))',
+        'print("===DONE===")'
+      ].join('\n');
+      await _send(diagCode + '\x04');
+      if (!await _waitFor('OK', 5000)) throw new Error('診断コードが受け付けられませんでした。');
+      var stdout = await _readUntil('\x04', 15000);
+      var stderr = await _readUntil('\x04', 2000);
+      await _send('\x02');  // Ctrl+B: exit raw REPL
+
+      if (stdout === null || stderr === null) throw new Error('診断タイムアウト。');
+      if (stderr.trim()) throw new Error('診断エラー: ' + stderr.trim());
+      var fIdx  = stdout.indexOf('===FILES===');
+      var cIdx  = stdout.indexOf('===CFG===');
+      var dIdx  = stdout.indexOf('===DONE===');
+      var files = (fIdx !== -1 && cIdx !== -1) ? stdout.slice(fIdx + 11, cIdx).trim() : '';
+      var cfg   = (cIdx !== -1 && dIdx !== -1) ? stdout.slice(cIdx + 9,  dIdx).trim() : '';
+      _showDiag(files, cfg);
+      if (fIdx === -1 || cIdx === -1 || dIdx === -1 || stdout.indexOf('===DIAGERR===') !== -1) {
+        throw new Error('書き込み結果を確認できませんでした。');
+      }
+      var installedFiles = files.split(',');
+      if (REQUIRED_FILES.some(function (name) { return installedFiles.indexOf(name) === -1; }) || cfg.trim() !== cfgContent.trim()) {
+        throw new Error('書き込み後のファイルまたは設定の確認に失敗しました。');
+      }
+
+      _setProgress(100, '書き込み完了');
+      _setStatus('setup-write-status', '');
+
+      /* 成功バナーを表示 */
+      var ssidDisp = document.getElementById('cfg-ssid').value.trim() || ('Wren-' + (teamNum < 10 ? '0' : '') + teamNum);
+      var passDisp = document.getElementById('cfg-pass').value.trim() || ('wren' + String(teamNum).padStart(4, '0'));
+      var si = document.getElementById('write-success-info');
+      if (si) si.innerHTML =
+        'Wi-Fi 名&nbsp;&nbsp;: <strong>' + ssidDisp + '</strong><br>' +
+        'パスワード: <strong>' + passDisp + '</strong><br>' +
+        'URL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <strong>http://192.168.4.1/</strong>';
+      var sEl = document.getElementById('write-success');
+      if (sEl) { sEl.classList.add('visible'); sEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      if (window.WrenUpdates) window.WrenUpdates.recordInstalled();
+
+    } catch (e) {
+      _resetProgress();
+      _setStatus('setup-write-status', 'エラー: ' + (e.message || e));
+    }
+    writeBtn.disabled = false;
+  };
+})();
+
+/* ── Loader ──────────────────────────────────────────────── */
+(function () {
+  function showPage() {
+    var loader = document.getElementById('loader');
+    if (!loader) return;
+    loader.classList.add('hide');
+    setTimeout(function () {
+      loader.style.display = 'none';
+      document.body.classList.add('loaded');
+    }, 500);
+  }
+  var fallback = setTimeout(showPage, 6000);
+  if (document.readyState === 'complete') {
+    clearTimeout(fallback);
+    setTimeout(showPage, 400);
+  } else {
+    window.addEventListener('load', function () {
+      clearTimeout(fallback);
+      setTimeout(showPage, 400);
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>NestBlocks Wren</title>
+
+  <!-- フォント -->
+
+
+
+
+  <!-- Blockly -->
+
+
+
+
+
+  <!-- カスタムブロック定義 -->
+
+
+
+
+  <!-- Prism.js -->
+
+
+
+  <!-- Chart.js -->
+
+
+  <!-- スタイルシート -->
+  <link rel="stylesheet" href="/app.e005fce8655c.css">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-title" content="NestBlocks Wren">
+</head>
+
+<body>
+
+  <!-- ========================================
+       ローディング画面
+       ======================================== -->
+  <div id="loadingScreen" class="ld">
+    <div class="ld-scene">
+      <div class="ld-logo">
+        <svg class="ld-logo-svg" viewBox="0 0 66 54" fill="none">
+          <rect class="ld-wren-tail" x="38" y="0" width="13" height="30" rx="3.25" fill="var(--orange)" transform="rotate(32 44.5 30)"/>
+          <rect class="ld-wren-body-v" x="8" y="8" width="14" height="34" rx="3.5" fill="currentColor"/>
+          <rect class="ld-wren-body-h" x="8" y="28" width="34" height="14" rx="3.5" fill="currentColor"/>
+          <polygon class="ld-wren-arrow" points="8,13 0,17 8,21" fill="var(--orange)"/>
+          <circle class="ld-wren-eye" cx="15" cy="16" r="2.2" fill="var(--bg)"/>
+        </svg>
+      </div>
+      <h1 class="ld-brand">Nest<em>Blocks</em><span class="ld-wren-bar"></span><span class="ld-wren-ed">Wren</span></h1>
+    </div>
+  </div>
+
+  <!-- ========================================
+       ヘッダー
+       ======================================== -->
+  <header class="header">
+    <div class="logo" onclick="switchTab('workspace')">
+      <div class="logo-icon">
+        <svg viewBox="0 0 66 54" fill="none">
+          <rect x="38" y="0" width="13" height="30" rx="3.25" fill="var(--orange)" transform="rotate(32 44.5 30)"/>
+          <rect x="8" y="8" width="14" height="34" rx="3.5" fill="currentColor"/>
+          <rect x="8" y="28" width="34" height="14" rx="3.5" fill="currentColor"/>
+          <polygon points="8,13 0,17 8,21" fill="var(--orange)"/>
+          <circle cx="15" cy="16" r="2.2" fill="var(--bg)"/>
+        </svg>
+      </div>
+      <div class="logo-text">Nest<em>Blocks</em><span class="logo-wren-bar"></span><span class="logo-wren-ed">Wren</span></div>
+    </div>
+
+    <nav class="nav">
+
+      <button class="nav-item" data-tab="workspace" data-i18n="nav.workspace">ブロック</button>
+      <button class="nav-item" data-tab="code" data-i18n="nav.code">コード</button>
+
+      <button class="nav-item" data-tab="settings" data-i18n="nav.settings">設定</button>
+    </nav>
+
+    <div class="spacer"></div>
+
+    <button class="connect-btn" id="connectBtn" onclick="toggleConnection()">
+      <div class="dot"></div><span id="connectLabel" data-i18n="connect.disconnected">未接続</span>
+    </button>
+    <button class="upload-btn" onclick="uploadCode()">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span data-i18n="btn.upload">書き込み</span>
+    </button>
+    <div class="hgap"></div>
+    <!-- ヘルプボタン -->
+    <button class="icon-btn" onclick="NestHelp.open()" title="ヘルプ" data-i18n-title="help.title">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </button>
+    <button class="icon-btn" onclick="toggleTheme()" title="テーマ切替">
+      <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+
+  <!-- ========================================
+       メインコンテンツ
+       ======================================== -->
+  <main class="main">
+
+
+
+        <!-- ====== ワークスペース ====== -->
+    <div class="tab-panel active" id="workspace">
+      <div class="workspace">
+        <div class="wst">
+          <div class="wsg">
+            <button class="wsb" title="元に戻す" onclick="undo()"><svg viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 2.5-6.5L3 7"/></svg></button>
+            <button class="wsb" title="やり直す" onclick="redo()"><svg viewBox="0 0 24 24"><path d="M21 7v6h-6"/><path d="M21 13a9 9 0 1 1-2.5-6.5L21 7"/></svg></button>
+            <span class="block-count" id="blockCount">0 ブロック</span>
+          </div>
+          <div class="wsg">
+            <div class="zoom">
+              <button class="zb" onclick="zoomOut()">−</button>
+              <span class="zv" id="zoomLevel">100%</span>
+              <button class="zb" onclick="zoomIn()">+</button>
+            </div>
+            <button class="wsb" title="中央に戻す" onclick="resetView()"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+          </div>
+          <div class="wsg">
+            <span class="project-name" id="projectName"></span>
+            <button class="wsb" title="プロジェクトを保存" onclick="downloadProject()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+            <button class="wsb" title="印刷" onclick="showPrintModal()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+            <button class="run-btn" onclick="runCode()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span data-i18n="ws.run">実行</span></button>
+            <button class="stop-btn" title="停止" onclick="stopExec()"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg></button>
+          </div>
+        </div>
+        <div class="blockly-area">
+          <div id="blocklyDiv"></div>
+          <!-- 空の状態画面 -->
+          <div class="workspace-empty" id="workspaceEmpty">
+            <div class="we-icon">📦</div>
+            <div class="we-title" data-i18n="ws.emptyTitle">プロジェクトを開始</div>
+            <div class="we-desc" data-i18n="ws.emptyDesc">新規プロジェクトを作成するか、既存のファイルを開いてください</div>
+            <div class="we-actions">
+              <button class="we-btn" onclick="showNewProjectModal()">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span data-i18n="ws.newProject">新規作成</span>
+              </button>
+              <button class="we-btn we-btn-outline" onclick="openFileProject()">
+                <svg viewBox="0 0 24 24"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3V7z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span data-i18n="ws.openFile">ファイルを開く</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bp collapsed" id="bottomPanel">
+          <div class="bp-head" onclick="togglePanel()">
+            <span class="bp-title" data-i18n="console.title">コンソール</span>
+            <div class="bp-right">
+              <button class="bp-clear" onclick="clearConsole(event)" data-i18n="console.clear">クリア</button>
+              <svg class="bp-chevron" viewBox="0 0 24 24"><polyline points="6 15 12 9 18 15"/></svg>
+            </div>
+          </div>
+          <div class="bp-body">
+            <div class="console" id="consoleOutput">
+              <div class="cl"><span class="ct">[--:--:--]</span><span class="cm ok" data-i18n="console.ready">NestBlocks 準備完了</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ====== コード ====== -->
+    <div class="tab-panel" id="code">
+
+      <!-- 通常表示（フォー状態） -->
+      <div class="code-layout" id="codeNormalLayout">
+        <div class="code-empty" id="codeEmpty">
+          <div class="ce-icon">🐍</div>
+          <div class="ce-title" data-i18n="code.empty">コードがありません</div>
+          <div class="ce-desc" data-i18n="code.emptyDesc">ブロックタブでブロックを配置すると<br>MicroPython コードが自動生成されます</div>
+          <button class="btn" onclick="switchTab('workspace')">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            <span data-i18n="code.goWorkspace">ブロックタブへ</span>
+          </button>
+        </div>
+        <div class="code-editor" id="codeEditor" style="display: none;">
+          <div class="ed-head">
+            <div class="ed-left"><span class="ed-file">main.py</span><span class="ed-proj" id="codeProjectName"></span></div>
+            <div class="ea">
+              <button class="eb cm-toggle-btn" id="cmToggleBtn" onclick="NestCodingMode.toggle()">コーディングモード</button>
+              <button class="eb" onclick="changeCodeFontSize(-1)">A-</button>
+              <button class="eb" onclick="changeCodeFontSize(1)">A+</button>
+              <button class="eb" onclick="copyCode()" data-i18n="code.copy">コピー</button>
+              <button class="eb" onclick="downloadCode()" data-i18n="code.download">ダウンロード</button>
+            </div>
+          </div>
+          <div class="ed-body">
+            <div class="ln" id="lineNumbers">1</div>
+            <div class="cc" id="codeContent"># ブロックを配置するとコードが表示されます</div>
+          </div>
+          <div class="ed-foot">
+            <span class="ef-item" id="codeStats">0 行 · 0 文字</span>
+            <span class="ef-item">MicroPython</span>
+            <span class="ef-item">UTF-8</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- コーディングモード（編集状態）3ペインレイアウト -->
+      <div class="cm-layout" id="cmLayout" style="display:none;">
+
+        <!-- 左ペイン: 手順 / ブロック -->
+        <div class="cm-left">
+          <div class="cm-tab-bar">
+            <button class="cm-tab active" data-cmtab="steps" onclick="NestCodingMode.switchLeftTab('steps')">手順</button>
+            <button class="cm-tab" data-cmtab="blocks" onclick="NestCodingMode.switchLeftTab('blocks')">ブロック</button>
+          </div>
+          <div class="cm-mismatch" id="cmMismatch" style="display:none;">
+            <span id="cmMismatchText"></span>
+            <button onclick="NestCodingMode.refreshSteps()">手順を入れ直す</button>
+          </div>
+          <div class="cm-left-body" id="cmStepsPane">
+            <div class="cm-steps-list" id="cmStepsList"></div>
+          </div>
+          <div class="cm-left-body" id="cmBlocksPane" style="display:none;">
+            <div id="cmBlocksImg"><div class="cm-blocks-hint">「ブロック」タブをクリックすると表示されます</div></div>
+          </div>
+        </div>
+
+        <!-- 中央ペイン: エディタ -->
+        <div class="cm-center">
+          <div class="cm-editor-head">
+            <div class="cm-editor-head-l">
+              <span class="ed-file">main.py</span>
+              <span class="ed-proj" id="cmProjectName"></span>
+            </div>
+            <div class="cm-editor-head-r">
+              <button class="eb" onclick="NestCodingMode.requestTurnOff()">終了</button>
+              <button class="eb" onclick="NestCodingMode.resetEditor()">スケルトンに戻す</button>
+            </div>
+          </div>
+          <div class="cm-editor-body">
+            <div class="ln" id="cmLineNumbers">1</div>
+            <textarea class="cm-textarea" id="cmTextarea" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+          </div>
+          <div class="ed-foot">
+            <span class="ef-item">コーディングモード</span>
+            <span class="ef-item">MicroPython</span>
+            <span class="ef-item">UTF-8</span>
+          </div>
+        </div>
+
+        <!-- 右ペイン: スニペット帳 -->
+        <div class="cm-right">
+          <div class="cm-snippets" id="cmSnippets"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── コーディングモード ON モーダル ── -->
+    <div class="overlay" id="cmOnOverlay">
+      <div class="dialog">
+        <div class="dialog-title">コーディングモードについて</div>
+        <div class="dialog-msg">
+          このモードでは、ブロックの手順を見ながら自分で Python を書く練習ができます。
+          <ul class="cm-intro-list">
+            <li>自動生成コードが消えて、日本語の手順コメントが並びます</li>
+            <li>その下に、自分でコードを書いていきます</li>
+            <li>書いたコードはブロックには反映されません</li>
+            <li>ブロックを変えると左側の手順だけ更新されます</li>
+          </ul>
+        </div>
+        <label class="cm-check-label">
+          <input type="checkbox" id="cmDontShowAgain">
+          次回から表示しない
+        </label>
+        <div class="dialog-btns">
+          <button class="dbtn" onclick="NestCodingMode.cancelTurnOn()">キャンセル</button>
+          <button class="dbtn dbtn-fill" onclick="NestCodingMode.confirmTurnOn()">はじめる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── コーディングモード OFF モーダル ── -->
+    <div class="overlay" id="cmOffOverlay">
+      <div class="dialog">
+        <div class="dialog-title">コーディングモードを終了しますか？</div>
+        <div class="dialog-msg">書いたコードは保存されません。</div>
+        <div class="dialog-btns">
+          <button class="dbtn" onclick="NestCodingMode.cancelTurnOff()">キャンセル</button>
+          <button class="dbtn" onclick="NestCodingMode.copyAndTurnOff()">コードをコピーして終了</button>
+          <button class="dbtn dbtn-fill" onclick="NestCodingMode.confirmTurnOff()">終了</button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+        <!-- ====== 設定 ====== -->
+    <div class="tab-panel" id="settings">
+      <div class="settings-layout"><div class="settings-inner">
+
+        <div class="sg">
+          <div class="sg-title" data-i18n="settings.appearance">外観</div>
+          <div class="sg-card"><div class="theme-row">
+            <div class="theme-opt active" data-theme="light"><div class="te">☀️</div><div class="tl" data-i18n="settings.light">ライト</div></div>
+            <div class="theme-opt" data-theme="dark"><div class="te">🌙</div><div class="tl" data-i18n="settings.dark">ダーク</div></div>
+          </div></div>
+        </div>
+
+        <!-- 言語設定 -->
+        <div class="sg">
+          <div class="sg-title">言語 / Language</div>
+          <div class="sg-card">
+            <div class="sg-item">
+              <div><div class="sg-label">表示言語</div><div class="sg-desc">Display language</div></div>
+              <select class="sg-select" id="langSelect" onchange="NestI18n.setLang(this.value)">
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="sg">
+          <div class="sg-title" data-i18n="settings.editor">エディタ</div>
+          <div class="sg-card">
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.sound">サウンド</div><div class="sg-desc" data-i18n="settings.soundDesc">ブロック操作時の効果音</div></div><select class="sg-select" id="soundSelect"><option value="off">OFF</option><option value="on">ON</option></select></div>
+          </div>
+        </div>
+
+        <div class="sg">
+          <div class="sg-title" data-i18n="settings.connection">接続</div>
+          <div class="sg-card">
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.baudRate">ボーレート</div><div class="sg-desc" data-i18n="settings.baudRateDesc">シリアル通信の速度</div></div><select class="sg-select" id="baudRate"><option value="9600">9600</option><option value="115200" selected>115200</option><option value="230400">230400</option></select></div>
+          </div>
+        </div>
+
+        <div class="sg">
+          <div class="sg-title" data-i18n="settings.project">プロジェクト</div>
+          <div class="sg-card">
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.export">エクスポート</div><div class="sg-desc">全プロジェクトをJSONファイルに保存</div></div><button class="eb" onclick="exportProjects()">エクスポート</button></div>
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.import">インポート</div><div class="sg-desc">JSONファイルからプロジェクトを復元</div></div><button class="eb" onclick="document.getElementById('importFile').click()">インポート</button><input type="file" id="importFile" accept=".json" style="display:none"></div>
+            <!-- 印刷 -->
+            <div class="sg-item"><div><div class="sg-label" data-i18n="print.title">印刷</div><div class="sg-desc">ブロックとコードを印刷</div></div><button class="eb" onclick="showPrintModal()">印刷設定</button></div>
+          </div>
+        </div>
+
+        <div class="sg">
+          <div class="sg-title" data-i18n="settings.shortcuts">キーボードショートカット</div>
+          <div class="sg-card">
+            <div class="sg-item"><div class="sg-label">保存</div><kbd class="kbd">Ctrl + S</kbd></div>
+            <div class="sg-item"><div class="sg-label">元に戻す</div><kbd class="kbd">Ctrl + Z</kbd></div>
+            <div class="sg-item"><div class="sg-label">やり直す</div><kbd class="kbd">Ctrl + Shift + Z</kbd></div>
+            <div class="sg-item"><div class="sg-label">削除</div><kbd class="kbd">Delete / Backspace</kbd></div>
+            <div class="sg-item"><div class="sg-label">ズーム</div><kbd class="kbd">Ctrl + スクロール</kbd></div>
+          </div>
+        </div>
+
+        <div class="sg">
+          <div class="sg-title" data-i18n="settings.data">データ</div>
+          <div class="sg-card">
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.storage">使用容量</div><div class="sg-desc" id="storageInfo">プロジェクト: 0件</div></div></div>
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.reset">設定をリセット</div><div class="sg-desc">すべての設定を初期状態に戻します</div></div><button class="danger-btn" onclick="resetSettings()">リセット</button></div>
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.deleteAll">すべてのデータを削除</div><div class="sg-desc">プロジェクトと設定をすべて削除します</div></div><button class="danger-btn" onclick="clearAllData()">すべて削除</button></div>
+          </div>
+        </div>
+
+        <div class="sg">
+          <div class="sg-title" data-i18n="settings.about">NestBlocks について</div>
+          <div class="sg-card">
+            <div class="sg-item"><div><div class="sg-label">バージョン</div><div class="sg-desc">v1.4.1</div></div></div>
+            <div class="sg-item"><div><div class="sg-label">Blockly</div><div class="sg-desc" id="blocklyVersion">-</div></div></div>
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.browser">対応ブラウザ</div><div class="sg-desc">Chrome / Edge（Web Serial API対応）</div></div></div>
+            <div class="sg-item"><div><div class="sg-label" data-i18n="settings.license">ライセンス</div><div class="sg-desc">Apache License 2.0（Blockly）</div></div></div>
+          </div>
+        </div>
+
+      </div></div>
+    </div>
+
+  </main>
+
+
+  <!-- 新規作成ダイアログ -->
+  <div class="overlay" id="newProjectOverlay">
+    <div class="dialog">
+      <div class="dialog-title" data-i18n="dialog.newProject">新規プロジェクト</div>
+      <input class="dialog-input" id="newProjectInput" type="text" data-i18n="dialog.projectName" placeholder="プロジェクト名を入力" maxlength="40" autocomplete="off">
+      <div class="dialog-label" data-i18n="dialog.board">ボード</div>
+      <select class="dialog-input" id="boardSelect">
+        <option value="pico">Raspberry Pi Pico</option>
+        <option value="esp32" disabled>ESP32（準備中）</option>
+      </select>
+      <div class="dialog-btns">
+        <button class="dbtn" onclick="closeNewProject()" data-i18n="dialog.cancel">キャンセル</button>
+        <button class="dbtn dbtn-fill" onclick="createNewProject()" data-i18n="dialog.create">作成</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 確認ダイアログ -->
+  <div class="overlay" id="confirmOverlay">
+    <div class="dialog">
+      <div class="dialog-title" id="confirmTitle">確認</div>
+      <div class="dialog-msg" id="confirmMsg"></div>
+      <div class="dialog-btns">
+        <button class="dbtn" id="confirmCancelBtn" data-i18n="dialog.cancel">キャンセル</button>
+        <button class="dbtn dbtn-fill" id="confirmOkBtn" data-i18n="dialog.ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 接続モーダル -->
+  <div class="cm-overlay" id="cmOverlay">
+    <div class="cm-modal" id="cmModal">
+      <div class="cm-accent"></div>
+      <div class="cm-top">
+        <div class="cm-steps">
+          <div class="cm-step-item">
+            <div class="cm-step-circle active" id="cmS1"><span>1</span></div>
+            <div class="cm-step-line" id="cmL1"></div>
+          </div>
+          <div class="cm-step-item">
+            <div class="cm-step-circle" id="cmS2"><span>2</span></div>
+            <div class="cm-step-line" id="cmL2"></div>
+          </div>
+          <div class="cm-step-item">
+            <div class="cm-step-circle" id="cmS3"><span>3</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- STEP 1 -->
+      <div class="cm-panel active" id="cmP1">
+        <div class="cm-illust">
+          <svg viewBox="0 0 360 160" fill="none">
+            <rect width="360" height="160" fill="var(--bg-h)"/>
+            <rect x="30" y="28" width="130" height="88" rx="8" fill="#2E3140"/>
+            <rect x="38" y="36" width="114" height="72" rx="5" fill="#1A1D28"/>
+            <rect x="48" y="48" width="50" height="5" rx="2.5" fill="var(--orange)"/>
+            <rect x="48" y="57" width="80" height="5" rx="2.5" fill="var(--green)"/>
+            <rect x="48" y="66" width="60" height="5" rx="2.5" fill="var(--blue)"/>
+            <rect x="280" y="30" width="36" height="100" rx="5" fill="#1B5E20"/>
+            <rect x="284" y="34" width="28" height="92" rx="3" fill="#2E7D32"/>
+            <text x="298" y="124" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.6)" font-family="monospace">Pico</text>
+          </svg>
+        </div>
+        <div class="cm-num">STEP 01</div>
+        <div class="cm-title" data-i18n="cm.step1.title">USB ケーブルで<br>パソコンに接続</div>
+        <div class="cm-desc" data-i18n="cm.step1.desc">マイコン の USB ポートとパソコンを、MicroUSB ケーブルでつないでください。</div>
+        <div class="cm-hint">
+          <span class="cm-hint-icon">💡</span>
+          <div class="cm-hint-text" data-i18n="cm.step1.hint">初めて接続する場合、ドライブとして認識されることがあります。そのままお進みください。</div>
+        </div>
+        <div class="cm-btns">
+          <button class="cm-btn-ghost" onclick="closeConnectModal()" data-i18n="dialog.cancel">キャンセル</button>
+          <button class="cm-btn-primary" onclick="cmGoStep(2)">
+            <span data-i18n="cm.step1.btn">つないだ</span>
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><path d="M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- STEP 2 -->
+      <div class="cm-panel" id="cmP2">
+        <div class="cm-illust">
+          <svg viewBox="0 0 360 160" fill="none">
+            <rect width="360" height="160" fill="var(--bg-h)"/>
+            <rect x="40" y="20" width="280" height="120" rx="10" fill="var(--bg-s)" opacity=".9"/>
+            <text x="180" y="50" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text)">接続するポートを選択</text>
+            <rect x="60" y="60" width="240" height="30" rx="7" fill="rgba(200,72,18,.09)" stroke="rgba(200,72,18,.3)" stroke-width="1.5"/>
+            <text x="80" y="79" font-family="monospace" font-size="10" fill="var(--orange)">Raspberry Pi Pico</text>
+            <rect x="140" y="110" width="80" height="20" rx="8" fill="var(--orange)"/>
+            <text x="180" y="124" text-anchor="middle" font-size="9" fill="white" font-weight="800">接続</text>
+          </svg>
+        </div>
+        <div class="cm-num">STEP 02</div>
+        <div class="cm-title" data-i18n="cm.step2.title">ポートを選択して<br>接続ボタンを押す</div>
+        <div class="cm-desc" data-i18n="cm.step2.desc">「接続する」を押すとブラウザのポート選択画面が開きます。リストから使用するマイコンを選んで接続してください。</div>
+        <div class="cm-btns">
+          <button class="cm-btn-ghost" onclick="cmGoStep(1)">
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><path d="M11 6l-6 6 6 6"/></svg>
+            <span data-i18n="dialog.back">戻る</span>
+          </button>
+          <button class="cm-btn-primary" onclick="cmDoConnect()">
+            <span data-i18n="cm.step2.btn">接続する</span>
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- STEP 3 -->
+      <div class="cm-panel" id="cmP3">
+        <div class="cm-illust">
+          <svg viewBox="0 0 360 160" fill="none">
+            <rect width="360" height="160" fill="var(--bg-h)"/>
+            <!-- リップル -->
+            <circle class="cm-done-ripple" cx="180" cy="80" r="26" fill="none" stroke="var(--green)" stroke-width="1.5"/>
+            <circle class="cm-done-ripple cm-done-ripple-2" cx="180" cy="80" r="26" fill="none" stroke="var(--green)" stroke-width="1"/>
+            <!-- メイン円 -->
+            <circle class="cm-done-circle" cx="180" cy="80" r="26" fill="rgba(93,192,108,.12)" stroke="var(--green)" stroke-width="2"/>
+            <!-- チェックマーク -->
+            <path class="cm-done-check" d="M168 80 L176 88 L194 70" stroke="var(--green)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="cm-num cm-num--green">接続完了</div>
+        <div class="cm-title" data-i18n="cm.step3.title">マイコン に<br>接続しました！</div>
+        <div class="cm-desc" data-i18n="cm.step3.desc">これでブロックプログラムを書き込めます。ブロックを組み立てて、「書き込み」ボタンを押してみましょう。</div>
+        <div class="cm-btns">
+          <button class="cm-btn-primary cm-btn-primary--green" onclick="closeConnectModal()">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="cm.step3.btn">はじめる</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 拡張機能モーダル -->
+  <div class="ext-overlay" id="pluginOverlay">
+    <div class="ext-modal">
+      <div class="ext-header">
+        <div class="ext-header-left">
+          <span class="ext-title" data-i18n="ext.title">拡張機能</span>
+          <span class="ext-subtitle" data-i18n="ext.subtitle">プロジェクトに機能を追加</span>
+        </div>
+        <button class="ext-close" onclick="closePluginModal()">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="ext-body">
+        <div class="ext-grid" id="pluginList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PicoNest デバイスモーダル -->
+  <div class="ext-overlay" id="picoNestOverlay">
+    <div class="ext-modal pn-modal">
+      <div class="ext-header">
+        <div class="ext-header-left">
+          <span class="ext-title">PicoNest</span>
+          <span class="ext-subtitle">Raspberry Pi Pico 用拡張ボード</span>
+        </div>
+        <button class="ext-close" onclick="closePicoNestModal()">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="ext-body">
+        <div class="pn-image">
+          <img src="assets/PicoNest.jpg" alt="PicoNest 拡張ボード">
+        </div>
+        <div class="pn-features">
+          <h3 class="pn-features-title">主な機能</h3>
+          <ul class="pn-feature-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><strong>DCモーター制御</strong><span>モータードライバ内蔵で、4つの DC モーターを駆動できます。</span></div>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><strong>サーボモーター対応</strong><span>4つのサーボモーターを接続して角度制御が可能です。</span></div>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><strong>OLEDディスプレイ</strong><span>I2C 接続の OLED ディスプレイで情報を表示できます。</span></div>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><strong>各種センサー拡張</strong><span>GPIO・I2C・UART アナログ入力のピンを引き出し、センサーを手軽に追加できます。</span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RoboPad モーダル -->
+</div>
+
+  <!-- 更新履歴モーダル -->
+  <div class="ext-overlay" id="changelogOverlay">
+    <div class="ext-modal cl-modal">
+      <div class="ext-header">
+        <div class="ext-header-left">
+          <span class="ext-title">更新履歴</span>
+          <span class="ext-subtitle">NestBlocks のアップデート内容</span>
+        </div>
+        <button class="ext-close" onclick="closeChangelogModal()">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="ext-body">
+        <div class="cl-list" id="changelogList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ヘルプモーダル -->
+  <div class="ext-overlay" id="helpOverlay">
+    <div class="ext-modal help-modal">
+      <div class="ext-header">
+        <div class="ext-header-left">
+          <span class="ext-title" data-i18n="help.title">ヘルプ</span>
+        </div>
+        <button class="ext-close" onclick="NestHelp.close()">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="help-layout">
+        <div class="help-nav" id="helpNav"></div>
+        <div class="help-body" id="helpBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 印刷モーダル -->
+  <div class="overlay" id="printOverlay">
+    <div class="dialog print-dialog">
+      <div class="dialog-title" data-i18n="print.title">印刷設定</div>
+      <div class="print-option">
+        <label class="print-check">
+          <input type="checkbox" id="printIncludeCode" checked>
+          <span class="print-check-box"></span>
+          <span class="print-check-label" data-i18n="print.includeCode">Python コードを含める</span>
+        </label>
+      </div>
+      <div class="dialog-btns">
+        <button class="dbtn" onclick="closePrintModal()" data-i18n="dialog.cancel">キャンセル</button>
+        <button class="dbtn dbtn-fill" onclick="doPrint()" data-i18n="print.btn">印刷</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 書き込みモーダル -->
+  <div class="wm-overlay" id="wmOverlay">
+    <div class="wm-modal" id="wmModal">
+      <div class="wm-accent"></div>
+      <div class="wm-head">
+        <div class="wm-pico-icon">
+          <div class="wm-transfer-dots"><div class="wm-tdot"></div><div class="wm-tdot"></div><div class="wm-tdot"></div></div>
+          <svg class="wm-pico-svg" viewBox="0 0 48 48" fill="none">
+            <rect x="10" y="4" width="28" height="40" rx="4" fill="#1B5E20"/>
+            <rect x="13" y="7" width="22" height="34" rx="2" fill="#2E7D32"/>
+            <rect x="17" y="4" width="14" height="8" rx="2" fill="#B0BEC5"/>
+            <rect x="19" y="5.5" width="10" height="5" rx="1" fill="#90A4AE"/>
+            <rect x="16" y="22" width="16" height="12" rx="2.5" fill="#37474F"/>
+          </svg>
+        </div>
+        <div>
+          <div class="wm-title" id="wmTitle" data-i18n="upload.title">書き込み中…</div>
+          <div class="wm-board" id="wmBoard">Raspberry Pi Pico</div>
+        </div>
+      </div>
+      <div class="wm-progress">
+        <div class="wm-progress-header">
+          <span class="wm-progress-label">進捗</span>
+          <span class="wm-progress-pct" id="wmPct">0%</span>
+        </div>
+        <div class="wm-progress-track">
+          <div class="wm-progress-fill active" id="wmFill"></div>
+        </div>
+      </div>
+      <div class="wm-status-row">
+        <div class="wm-status-dot" id="wmDot"></div>
+        <div class="wm-status-text" id="wmStatus" data-i18n="upload.checking">接続を確認中…</div>
+      </div>
+      <div class="wm-stats">
+        <div class="wm-stat-item"><span class="wm-stat-label">転送</span><span class="wm-stat-value" id="wmBytes">0 KB / — KB</span></div>
+        <div class="wm-stat-item"><span class="wm-stat-label">速度</span><span class="wm-stat-value" id="wmRate">— KB/s</span></div>
+      </div>
+      <div class="wm-done-badge" id="wmDone">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" fill="rgba(93,192,108,.15)" stroke="var(--green)" stroke-width="1.5"/>
+          <path class="wm-check-path" d="M7 12.5 L10.5 16 L17 9" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <span data-i18n="upload.complete">書き込み完了！</span>
+      </div>
+      <button class="wm-cancel" id="wmCancel" onclick="closeWriteModal()" data-i18n="dialog.cancel">キャンセル</button>
+      <button class="wm-close" id="wmClose" onclick="closeWriteModal()" data-i18n="upload.close">閉じる</button>
+    </div>
+  </div>
+
+  <!-- 印刷用の隠し iframe -->
+  <iframe id="printFrame" style="position:absolute;width:0;height:0;border:none;overflow:hidden"></iframe>
+
+  <!-- トースト -->
+  <div class="toast" id="toast"></div>
+
+  <!-- JavaScript -->
+  <script src="/app.03f77ffa41a4.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ローディング画面の即時消去（実際の初期化完了で消す） -->
+  <script>
+  (function() {
+    // DOMContentLoadedで即座にフェードアウト開始
+    document.addEventListener('DOMContentLoaded', function() {
+      var ld = document.getElementById('loadingScreen');
+      if (!ld) return;
+      // 最低表示時間: 400ms（ロゴアニメーション完了を待つ）
+      setTimeout(function() {
+        ld.classList.add('out');
+        setTimeout(function() { ld.remove(); }, 400);
+      }, 400);
+    });
+  })();
+
+  // パーセントカウントアップ（CSSアニメーションのループに同期）
+  (function() {
+    var el = document.getElementById('hwUaPct');
+    if (!el) return;
+    var FILL_MS = 2750;
+    var raf;
+    function count() {
+      var start = performance.now();
+      function tick(now) {
+        var p = Math.min(Math.round(((now - start) / FILL_MS) * 100), 100);
+        el.textContent = p + '%';
+        if (p < 100) raf = requestAnimationFrame(tick);
+      }
+      cancelAnimationFrame(raf);
+      el.textContent = '0%';
+      raf = requestAnimationFrame(tick);
+    }
+    el.addEventListener('animationiteration', count);
+    count();
+  })();
+  </script>
+
+</body>
+</html>

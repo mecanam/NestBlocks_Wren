@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "project": "NestBlocks Wren",
+  "origin_id": "NBW-61bb60db-cdf4-40c7-9149-27aae51a9c8b",
+  "notice": "Original Wren code: modification and redistribution require permission under the project LICENSE. Third-party components retain their own licenses.",
+  "build_id": "9e1418e93184194f1636cf29f9ea9381bfb9ae12dc2b609370ae53d1bfe623ce",
+  "algorithm": "sha256",
+  "excluded": [
+    "/wren/config.py",
+    "/user_program.py",
+    "/projects",
+    "/lib",
+    "/mode.txt",
+    "/export.tmp"
+  ],
+  "files": {
+    "/boot.py": "785bbf57ee86a0c3addad6bd70aa439db683b9193de9e4b2a1cabb29f1dac597",
+    "/main.py": "140d0af81a7375583c46117ee904f60d32491a6ea6970c951390c07388a7b421",
+    "/run_mode.py": "da85366b16a1ffabc93e6ade5fc5d945503ad35c03a2ba4e0cafe1a262257adb",
+    "/wren/__init__.py": "95d55be9fcc7898ed6defc046dd43e57735b273fbede2bf2c5e8f144b7acbce9",
+    "/wren/api.py": "08812bc3d4e83a6801c9cace30c0c4fffa24ab354b535f46c6be126a34ee935a",
+    "/wren/console.py": "88d5ac7d41cdba4013dcde89d46645386866c539d867fc442eadbce1d3ead028",
+    "/wren/dns.py": "6936aa9d170d9d5291c6295040456ce0014c4531eed59c825beef4a4c2116641",
+    "/wren/led.py": "e0f9616f64ad55ba118108bf36aaaf85b03954dea5d105fc08433be071431581",
+    "/wren/portal.py": "eff952e924ce4e175a038fd4419fdb114a309ed836e62680a8f964a58d710e47",
+    "/wren/runner.py": "74b17bd6c58f48aa16095faeea693abd06601c85e8fe323c173103f3f5e96923",
+    "/wren/server.py": "bc7fd9134bbcf01b70f79faf88b7c08526216f6680beefe083045d030a810368",
+    "/wren/storage.py": "b39868e0c1a8302754e99e7b5541f6483412f4d9109fdeb135a541a328d46b84",
+    "/www/app.03f77ffa41a4.js.gz": "5f6d6d11c848183c3fc62372de0849db0b7354a6eee3e822b3dbdd700e50092f",
+    "/www/app.e005fce8655c.css.gz": "49ff95d00302c9b8369e9592abb0e622b78612dbad6cfd86323835e7c7ecd4db",
+    "/www/icon-180.png": "3af65aa485c5fa4668f874204c44a75820307760b4a34c9383a5a1318dae050e",
+    "/www/icon-192.png": "ccaf77bf44b2b5919a8128f5584b2f6daf786f0e20cc1c9c1ab5113f9e712e8c",
+    "/www/icon-512.png": "b76a1708da1b181b332003c01b155b9e8174c1b6a211d651b05ac02714573a4a",
+    "/www/index.html": "80d3321a652c5e14f24a4c794c451862c454760ddba3b5568e3995063a8946ce",
+    "/www/manifest.json": "b85e3a66f76b8b310c77461cea2f49da3b8b580321c630fd2a0c36776d1b492d"
+  }
+}
