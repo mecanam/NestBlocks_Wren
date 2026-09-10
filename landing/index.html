@@ -1270,6 +1270,11 @@
             .replace(/\r/g, '\\r').replace(/\n/g, '\\n');
   }
 
+  function _configMatches(actual, expected) {
+    // REPL の出力では LF が CRLF になる。既存の CR を含む場合も吸収する。
+    return actual.replace(/\r/g, '').trim() === expected.replace(/\r/g, '').trim();
+  }
+
   /* テキストファイルを 1024 文字チャンクずつ個別の Raw REPL 実行で書き込む */
   async function _writeFileToPico(remotePath, content) {
     var CHUNK = 1024;
@@ -1501,8 +1506,12 @@
         throw new Error('書き込み結果を確認できませんでした。');
       }
       var installedFiles = files.split(',');
-      if (REQUIRED_FILES.some(function (name) { return installedFiles.indexOf(name) === -1; }) || cfg.trim() !== cfgContent.trim()) {
-        throw new Error('書き込み後のファイルまたは設定の確認に失敗しました。');
+      var missingFiles = REQUIRED_FILES.filter(function (name) { return installedFiles.indexOf(name) === -1; });
+      if (missingFiles.length) {
+        throw new Error('書き込み後のファイルが不足しています: ' + missingFiles.join(', '));
+      }
+      if (!_configMatches(cfg, cfgContent)) {
+        throw new Error('書き込み後の config.py が指定した設定と一致しません。診断情報を確認してください。');
       }
 
       _setProgress(100, '書き込み完了');
